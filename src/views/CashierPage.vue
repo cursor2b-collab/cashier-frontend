@@ -1,6 +1,7 @@
 <template>
-  <div class="container">
-    <div class="box">
+  <div class="background-container">
+    <div class="container">
+      <div class="box">
       <div class="title">
         <div class="logo">
           <svg t="1723040851427" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4315" width="20" height="20">
@@ -182,6 +183,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -600,15 +602,35 @@ onMounted(async () => {
 body {
   padding: 0;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   min-width: 400px;
+  background-color: #f4f4f4;
+}
+
+.background-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  background-image: 
+    url('https://cy-747263170.imgix.net/sss1%20(8).jpg'),
+    linear-gradient(135deg, rgba(244, 244, 244, 0.95) 0%, rgba(232, 232, 232, 0.95) 100%);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .n-base-icon {
@@ -633,19 +655,19 @@ body {
   display: flex;
   font-size: 14px;
   color: rgb(31, 34, 37);
-  flex-wrap: nowrap;
-  white-space: nowrap;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .l2_1 {
   margin-right: 20px;
   color: rgb(31, 34, 37);
-  white-space: nowrap;
+  word-break: break-all;
 }
 
 .l2_2 {
   color: rgb(31, 34, 37);
-  white-space: nowrap;
+  word-break: break-all;
 }
 
 #rate {
@@ -667,7 +689,6 @@ body {
   border-radius: 10px;
   position: relative;
   overflow: hidden;
-  overflow-y: auto;
 }
 
 .tip {
@@ -734,6 +755,16 @@ body {
 }
 
 @media screen and (max-width: 750px) {
+  .background-container {
+    padding: 0;
+    background-attachment: scroll;
+    background-size: cover;
+  }
+
+  .container {
+    padding: 5px;
+  }
+
   .head {
     width: 95%;
     box-sizing: border-box;
@@ -741,9 +772,15 @@ body {
 
   .body {
     width: 95%;
-    margin: 15px;
+    margin: 15px auto;
     background-color: #fff;
     border-radius: 10px;
+  }
+
+  .box {
+    width: 100%;
+    padding: 0 5px;
+    box-sizing: border-box;
   }
 
   .icon {
@@ -762,6 +799,16 @@ body {
 
   .warn {
     margin: 8px 0;
+  }
+
+  .l2 {
+    flex-wrap: wrap;
+  }
+
+  .l2_1,
+  .l2_2 {
+    white-space: normal;
+    word-break: break-all;
   }
 }
 
@@ -804,8 +851,8 @@ body {
 
 .zz {
   display: block;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -919,8 +966,15 @@ body {
 }
 
 @media screen and (max-width: 750px) {
+  .reader {
+    width: 100%;
+    height: 100%;
+  }
+
   .reader img {
     width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
   }
 
   .info,
@@ -931,18 +985,27 @@ body {
   .module {
     width: 90%;
     height: auto;
-    max-height: 80vh;
+    max-height: 85vh;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
+    overflow-y: auto;
+  }
+
+  #teachimg {
+    max-height: 200px;
+    overflow-y: auto;
   }
 }
 
 .box {
   max-width: 800px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 .title {
@@ -996,8 +1059,8 @@ body {
 
 .reader {
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;
