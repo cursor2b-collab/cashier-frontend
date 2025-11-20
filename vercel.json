@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    {
+      "source": "/payment-config",
+      "destination": "https://vps.boltcode.vip/payment-config"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://vps.boltcode.vip/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
