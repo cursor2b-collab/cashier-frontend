@@ -291,7 +291,7 @@ function selectWallet(walletType) {
   const orderSN = orderData.value.orderSN
   
   sessionStorage.setItem(`order_${orderSN}`, JSON.stringify(orderData.value))
-  console.log('已保存订单数据到 sessionStorage:', orderData.value)
+  // console.log('已保存订单数据到 sessionStorage:', orderData.value)
   
   sessionStorage.setItem(`wallet_type_${orderSN}`, walletType)
   
@@ -307,7 +307,7 @@ function selectWallet(walletType) {
   const queryString = '?' + queryParams.toString()
   
   const baseUrl = `${window.location.origin}/payment/${orderSN}${queryString}`
-  console.log('钱包跳转URL (带金额):', baseUrl)
+  // console.log('钱包跳转URL (带金额):', baseUrl)
   
   const walletUrls = {
     imtoken: `imtokenv2://navigate/DappView?url=${encodeURIComponent(baseUrl)}`,
@@ -322,7 +322,7 @@ function selectWallet(walletType) {
 
   const url = walletUrls[walletType]
   if (url) {
-    console.log('跳转到钱包:', walletType, 'URL:', url)
+    // console.log('跳转到钱包:', walletType, 'URL:', url)
     window.location.href = url
   }
 }
@@ -393,11 +393,11 @@ function closeFullImage() {
 
 // 加载订单数据
 async function loadOrderData(orderSN) {
-  console.log('=== CashierPage: 开始加载订单数据 ===')
-  console.log('订单号:', orderSN)
+  // console.log('=== CashierPage: 开始加载订单数据 ===')
+  // console.log('订单号:', orderSN)
   
   if (!orderSN) {
-    console.error('❌ 订单号为空')
+    // console.error('❌ 订单号为空')
     return
   }
   
@@ -406,11 +406,11 @@ async function loadOrderData(orderSN) {
   const amountFromUrl = urlParams.get('amount')
   const idFromUrl = urlParams.get('id')
   
-  console.log('URL参数 - amount:', amountFromUrl, 'id:', idFromUrl)
+  // console.log('URL参数 - amount:', amountFromUrl, 'id:', idFromUrl)
   
   // 如果URL参数有金额，且当前数据已经有值，说明已经在 onMounted 中设置了，直接返回
   if (amountFromUrl && orderData.value.actual_price) {
-    console.log('✅ URL参数金额已设置，跳过加载')
+    // console.log('✅ URL参数金额已设置，跳过加载')
     return
   }
   
@@ -424,16 +424,16 @@ async function loadOrderData(orderSN) {
       if (idFromUrl) {
         orderData.value.id = idFromUrl
       }
-      console.log('✅ CashierPage: 已从URL参数加载订单数据:', orderData.value)
-      console.log('orderData.value.orderSN:', orderData.value.orderSN)
-      console.log('orderData.value.actual_price:', orderData.value.actual_price)
+      // console.log('✅ CashierPage: 已从URL参数加载订单数据:', orderData.value)
+      // console.log('orderData.value.orderSN:', orderData.value.orderSN)
+      // console.log('orderData.value.actual_price:', orderData.value.actual_price)
       return
     }
   }
   
   // 优先方案2：从 sessionStorage 获取（同域时可用）
   const cachedData = sessionStorage.getItem(`order_${orderSN}`)
-  console.log('sessionStorage数据:', cachedData)
+  // console.log('sessionStorage数据:', cachedData)
   
   if (cachedData) {
     try {
@@ -461,16 +461,16 @@ async function loadOrderData(orderSN) {
       }
       // 使用 Object.assign 确保响应式更新
       Object.assign(orderData.value, parsedData)
-      console.log('✅ CashierPage: 已从缓存加载订单数据:', orderData.value)
+      // console.log('✅ CashierPage: 已从缓存加载订单数据:', orderData.value)
       return
     } catch (e) {
-      console.error('❌ CashierPage: 解析sessionStorage数据失败:', e)
+      // console.error('❌ CashierPage: 解析sessionStorage数据失败:', e)
     }
   }
   
   // 备用方案3：从后端API获取
   try {
-    console.log('尝试从API获取订单数据...')
+    // console.log('尝试从API获取订单数据...')
     const response = await fetch(`/api/orders/${orderSN}`)
     if (response.ok) {
       const data = await response.json()
@@ -497,15 +497,15 @@ async function loadOrderData(orderSN) {
       }
       // 使用 Object.assign 确保响应式更新
       Object.assign(orderData.value, data)
-      console.log('✅ CashierPage: 已从API加载订单数据:', orderData.value)
+      // console.log('✅ CashierPage: 已从API加载订单数据:', orderData.value)
     } else {
-      console.error('❌ API请求失败，状态码:', response.status)
+      // console.error('❌ API请求失败，状态码:', response.status)
     }
   } catch (error) {
-    console.error('❌ CashierPage: 加载订单数据失败:', error)
+    // console.error('❌ CashierPage: 加载订单数据失败:', error)
   }
   
-  console.log('=== 最终订单数据 ===', orderData.value)
+  // console.log('=== 最终订单数据 ===', orderData.value)
 }
 
 // 加载店铺配置
@@ -519,28 +519,28 @@ async function loadShopConfig() {
       }
     }
   } catch (error) {
-    console.error('加载店铺配置失败:', error)
+    // console.error('加载店铺配置失败:', error)
   }
 }
 
 // 页面加载时获取订单数据
 onMounted(async () => {
-  console.log('=== CashierPage: 页面初始化 ===')
-  console.log('当前URL:', window.location.href)
+  // console.log('=== CashierPage: 页面初始化 ===')
+  // console.log('当前URL:', window.location.href)
   
   // 从路由参数获取订单号
   let orderSN = route.params.orderSN
-  console.log('路由参数 orderSN:', orderSN)
-  console.log('完整路由信息:', route)
+  // console.log('路由参数 orderSN:', orderSN)
+  // console.log('完整路由信息:', route)
   
   // 如果路由参数没有，尝试从URL路径中提取
   if (!orderSN) {
     const pathParts = window.location.pathname.split('/')
     orderSN = pathParts[pathParts.length - 1]
     if (orderSN && orderSN !== 'cashier' && orderSN !== '') {
-      console.log('从URL路径提取订单号:', orderSN)
+      // console.log('从URL路径提取订单号:', orderSN)
     } else {
-      console.error('❌ 无法获取订单号')
+      // console.error('❌ 无法获取订单号')
       return
     }
   }
@@ -549,11 +549,11 @@ onMounted(async () => {
   const urlParams = new URLSearchParams(window.location.search)
   const amountFromUrl = urlParams.get('amount')
   const idFromUrl = urlParams.get('id')
-  console.log('URL查询参数 - amount:', amountFromUrl, 'id:', idFromUrl)
+  // console.log('URL查询参数 - amount:', amountFromUrl, 'id:', idFromUrl)
   
   // 立即设置订单号
   orderData.value.orderSN = orderSN
-  console.log('已设置订单号:', orderData.value.orderSN)
+  // console.log('已设置订单号:', orderData.value.orderSN)
   
   // 如果有URL参数金额，立即设置
   if (amountFromUrl) {
@@ -564,13 +564,13 @@ onMounted(async () => {
       if (idFromUrl) {
         orderData.value.id = idFromUrl
       }
-      console.log('✅ 已从URL参数立即设置金额:', orderData.value.actual_price)
+      // console.log('✅ 已从URL参数立即设置金额:', orderData.value.actual_price)
     }
   }
   
   // 等待DOM更新
   await nextTick()
-  console.log('nextTick后 - orderSN:', orderData.value.orderSN, 'actual_price:', orderData.value.actual_price)
+  // console.log('nextTick后 - orderSN:', orderData.value.orderSN, 'actual_price:', orderData.value.actual_price)
   
   // 加载其他数据（可能会覆盖URL参数的数据，但URL参数优先）
   await Promise.all([
@@ -581,10 +581,10 @@ onMounted(async () => {
   // 再次等待DOM更新
   await nextTick()
   
-  console.log('=== CashierPage: 初始化完成 ===')
-  console.log('最终订单数据:', JSON.stringify(orderData.value, null, 2))
-  console.log('模板应该显示 - orderSN:', orderData.value.orderSN)
-  console.log('模板应该显示 - actual_price:', orderData.value.actual_price)
+  // console.log('=== CashierPage: 初始化完成 ===')
+  // console.log('最终订单数据:', JSON.stringify(orderData.value, null, 2))
+  // console.log('模板应该显示 - orderSN:', orderData.value.orderSN)
+  // console.log('模板应该显示 - actual_price:', orderData.value.actual_price)
 })
 </script>
 

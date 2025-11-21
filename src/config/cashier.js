@@ -45,7 +45,7 @@ export function getPaymentUrl(orderSN, idParam = '', amount = '') {
 export function saveOrderToSession(orderSN, orderData, websiteName = '好旺担保') {
   sessionStorage.setItem(`order_${orderSN}`, JSON.stringify(orderData))
   sessionStorage.setItem(`website_name_${orderSN}`, websiteName)
-  console.log('订单数据已保存到 sessionStorage:', { orderSN, orderData, websiteName })
+  // console.log('订单数据已保存到 sessionStorage:', { orderSN, orderData, websiteName })
 }
 
 /**
@@ -57,7 +57,7 @@ export function saveOrderToSession(orderSN, orderData, websiteName = '好旺担�
 export function navigateToCashier(orderSN, orderData, websiteName = '好旺担保') {
   saveOrderToSession(orderSN, orderData, websiteName)
   const url = getCashierUrl(orderSN)
-  console.log('跳转到统一收银台:', url)
+  // console.log('跳转到统一收银台:', url)
   window.location.href = url
 }
 
