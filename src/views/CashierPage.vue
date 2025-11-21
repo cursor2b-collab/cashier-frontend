@@ -258,14 +258,14 @@ const currentWallet = ref('imtoken') // 当前选择的钱包类型
 
 // 钱包教程图片映射
 const walletTeachImages = {
-  imtoken: ['/middleway/static/images/teach/imtoken.png', '/middleway/static/images/teach/imtoken1.png'],
-  tokenpocket: ['/middleway/static/images/teach/TP.png', '/middleway/static/images/teach/tp2.png'],
-  tronlink: ['/middleway/static/images/teach/tronlink.png', '/middleway/static/images/teach/tronlink1.png'],
-  metamask: ['/middleway/static/images/teach/metamask.png', '/middleway/static/images/teach/metamask2.png'],
-  trust: ['/middleway/static/images/teach/trust.png', '/middleway/static/images/teach/trust1.png'],
-  bitget: ['/middleway/static/images/teach/bitget.png', '/middleway/static/images/teach/bitget2.png'],
-  bitpie: ['/middleway/static/images/teach/imtoken.png', '/middleway/static/images/teach/imtoken1.png'], // 使用imtoken图片
-  coinbase: ['/middleway/static/images/teach/imtoken.png', '/middleway/static/images/teach/imtoken1.png'] // 使用imtoken图片
+  imtoken: ['/teach/imtoken.png', '/teach/imtoken1.png'],
+  tokenpocket: ['/teach/TP.png', '/teach/tp2.png'],
+  tronlink: ['/teach/tronlink.png', '/teach/tronlink1.png'],
+  metamask: ['/teach/metamask.png', '/teach/metamask2.png'],
+  trust: ['/teach/trust.png', '/teach/trust1.png'],
+  bitget: ['/teach/bitget.png', '/teach/bitget2.png'],
+  bitpie: ['/teach/imtoken.png', '/teach/imtoken1.png'], // 使用imtoken图片
+  coinbase: ['/teach/imtoken.png', '/teach/imtoken1.png'] // 使用imtoken图片
 }
 
 // 获取当前钱包的教程图片
@@ -346,8 +346,7 @@ function showManualPayment(walletType) {
   setTimeout(() => {
     const module = document.querySelector('.module')
     if (module) {
-      module.style.top = '50%'
-      module.style.transform = 'translate(-50%, -50%)'
+      module.classList.add('show')
     }
   }, 10)
 }
@@ -356,7 +355,7 @@ function showManualPayment(walletType) {
 function closeModal() {
   const module = document.querySelector('.module')
   if (module) {
-    module.style.top = '-1000px'
+    module.classList.remove('show')
   }
   setTimeout(() => {
     showModal.value = false
@@ -860,16 +859,23 @@ body {
   height: 700px;
   background-color: #fff;
   position: fixed;
-  top: -1000px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
   z-index: 10;
-  transition: top 0.3s;
+  transition: all 0.3s;
   display: flex;
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.module.show {
+  opacity: 1;
+  visibility: visible;
 }
 
 .warninfo {
@@ -981,9 +987,6 @@ body {
     width: 90%;
     height: auto;
     max-height: 85vh;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
     overflow-y: auto;
   }
 

